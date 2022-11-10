@@ -699,7 +699,7 @@ class amoAPIHub
             return false;
         }
 
-        $url = "https://" . config('app.amoCRM.subdomain') . ".amocrm.ru/api/v4/users/$id";
+        $url = "https://" . config('services.amoCRM.subdomain') . ".amocrm.ru/api/v4/users/$id?with=group";
 
         try {
             $response = $this->client->sendRequest([

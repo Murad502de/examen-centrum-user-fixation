@@ -39,5 +39,8 @@ return [
         'webhook_lead_change_stage_url' => env('AMOCRM_WEBHOOK_LEAD_CHANGE_STAGE_URL', null),
         'webhook_lead_create_url'       => env('AMOCRM_WEBHOOK_LEAD_CREATE_URL', null),
         'stage_name_signed_for_trial'   => env('AMOCRM_STAGE_NAME_SIGNED_FOR_TRIAL', null),
+        'field_id_fullname'             => env('AMOCRM_FIELD_ID_FULLNAME', null),
+        'field_id_department'           => env('AMOCRM_FIELD_ID_DEPARTMENT', null),
+
     ],
 ];

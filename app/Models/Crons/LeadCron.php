@@ -62,29 +62,42 @@ class LeadCron extends Model
                     (int) json_decode($lead->data)->pipeline_id
                 );
 
+                Log::info(__METHOD__, ['modified_user_id: ' . json_decode($lead->data)->modified_user_id]); //DELETE
                 Log::info(__METHOD__, [$stageName . " : " . config('services.amoCRM.stage_name_signed_for_trial')]); //DELETE
 
                 if ($stageName === config('services.amoCRM.stage_name_signed_for_trial')) {
                     Log::info(__METHOD__, ['das Lead muss aktualisiert werden']); //DELETE
-                }
 
-                // if ($fieldId) {
-                //     self::$amoAPIHub->updateLead([
-                //         [
-                //             "id"                   => (int) $lead->lead_id,
-                //             'custom_fields_values' => [
-                //                 [
-                //                     'field_id' => $fieldId,
-                //                     'values'   => [
-                //                         [
-                //                             'value' => time(),
-                //                         ],
-                //                     ],
-                //                 ],
-                //             ],
-                //         ],
-                //     ]);
-                // }
+                    $user      = self::$amoAPIHub->fetchUser((int) json_decode($lead->data)->modified_user_id);
+                    $userName  = $user['body']['name'];
+                    $userGroup = count($user['body']['_embedded']['groups']) ? $user['body']['_embedded']['groups'][0]['name'] : null;
+
+                    Log::info(__METHOD__, ['user: ', $userName . ' ' . $userGroup]); //DELETE
+                    Log::info(__METHOD__, [config('services.amoCRM.field_id_fullname')]); //DELETE
+                    Log::info(__METHOD__, [config('services.amoCRM.field_id_department')]); //DELETE
+
+                    self::$amoAPIHub->updateLead([[
+                        "id"                   => (int) $lead->lead_id,
+                        'custom_fields_values' => [
+                            [
+                                'field_id' => (int) config('services.amoCRM.field_id_fullname'),
+                                'values'   => [
+                                    [
+                                        'value' => $userName,
+                                    ],
+                                ],
+                            ],
+                            [
+                                'field_id' => (int) config('services.amoCRM.field_id_department'),
+                                'values'   => [
+                                    [
+                                        'value' => $userGroup,
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ]]);
+                }
 
                 // $lead->delete(); //TODO
             }
