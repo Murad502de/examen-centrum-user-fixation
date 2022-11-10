@@ -36,13 +36,7 @@ class amoClient
 
         if ( $this->requestCounter >= $this->requestLimit )
         {
-            Log::info(
-                __METHOD__,
-
-                [
-                    'message'  => 'request limit exceeded, requestCounter: ' . $this->requestCounter
-                ]
-            );
+            // Log::info(__METHOD__, ['message'  => 'request limit exceeded, requestCounter: ' . $this->requestCounter]);
 
             $this->requestDelay = 500;
             $this->requestCounter = 0;

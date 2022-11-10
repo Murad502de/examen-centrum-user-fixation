@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 // use App\Services\amoAPI\Entities\Lead as AmoLead;
 
-use Illuminate\Support\Facades\Log;
+// use Illuminate\Support\Facades\Log;
 
 class LeadCron extends Model
 {
@@ -50,7 +50,7 @@ class LeadCron extends Model
     }
     public static function parseRecentWebhooks()
     {
-        Log::info(__METHOD__, ['Scheduler::[LeadCron][parseRecentWebhooks]']); //DELETE
+        // Log::info(__METHOD__, ['Scheduler::[LeadCron][parseRecentWebhooks]']); //DELETE
 
         if (self::amoTokenExpirationControl()) {
             self::$amoAPIHub = new amoAPIHub(amoCRM::getAuthData());
@@ -62,19 +62,19 @@ class LeadCron extends Model
                     (int) json_decode($lead->data)->pipeline_id
                 );
 
-                Log::info(__METHOD__, ['modified_user_id: ' . json_decode($lead->data)->modified_user_id]); //DELETE
-                Log::info(__METHOD__, [$stageName . " : " . config('services.amoCRM.stage_name_signed_for_trial')]); //DELETE
+                // Log::info(__METHOD__, ['modified_user_id: ' . json_decode($lead->data)->modified_user_id]); //DELETE
+                // Log::info(__METHOD__, [$stageName . " : " . config('services.amoCRM.stage_name_signed_for_trial')]); //DELETE
 
                 if ($stageName === config('services.amoCRM.stage_name_signed_for_trial')) {
-                    Log::info(__METHOD__, ['das Lead muss aktualisiert werden']); //DELETE
+                    // Log::info(__METHOD__, ['das Lead muss aktualisiert werden']); //DELETE
 
                     $user      = self::$amoAPIHub->fetchUser((int) json_decode($lead->data)->modified_user_id);
                     $userName  = $user['body']['name'];
                     $userGroup = count($user['body']['_embedded']['groups']) ? $user['body']['_embedded']['groups'][0]['name'] : null;
 
-                    Log::info(__METHOD__, ['user: ', $userName . ' ' . $userGroup]); //DELETE
-                    Log::info(__METHOD__, [config('services.amoCRM.field_id_fullname')]); //DELETE
-                    Log::info(__METHOD__, [config('services.amoCRM.field_id_department')]); //DELETE
+                    // Log::info(__METHOD__, ['user: ', $userName . ' ' . $userGroup]); //DELETE
+                    // Log::info(__METHOD__, [config('services.amoCRM.field_id_fullname')]); //DELETE
+                    // Log::info(__METHOD__, [config('services.amoCRM.field_id_department')]); //DELETE
 
                     self::$amoAPIHub->updateLead([[
                         "id"                   => (int) $lead->lead_id,
