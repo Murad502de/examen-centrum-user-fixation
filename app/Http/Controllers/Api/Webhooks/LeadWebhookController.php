@@ -9,8 +9,6 @@ use App\Http\Requests\Api\Webhooks\LeadWebhookUpdateRequest;
 use App\Models\Crons\LeadCron;
 use Illuminate\Http\Response;
 
-use Illuminate\Support\Facades\Log;
-
 class LeadWebhookController extends Controller
 {
     public function create(LeadWebhookAddRequest $request)
@@ -35,8 +33,7 @@ class LeadWebhookController extends Controller
     private function handle(array $data)
     {
         if (
-            isset($data['id']) &&
-            ((int) $data['date_create'] >= (int) config('services.amoCRM.lead_created_at'))
+            isset($data['id'])
         ) {
             $lead = LeadCron::getLeadByAmoId($data['id']);
 

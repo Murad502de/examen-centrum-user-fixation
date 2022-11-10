@@ -38,5 +38,6 @@ return [
         'loss_stage_id'                 => env('AMOCRM_LOSS_STAGE_ID', null),
         'webhook_lead_change_stage_url' => env('AMOCRM_WEBHOOK_LEAD_CHANGE_STAGE_URL', null),
         'webhook_lead_create_url'       => env('AMOCRM_WEBHOOK_LEAD_CREATE_URL', null),
+        'stage_name_signed_for_trial'   => env('AMOCRM_STAGE_NAME_SIGNED_FOR_TRIAL', null),
     ],
 ];

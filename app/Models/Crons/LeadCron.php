@@ -7,9 +7,10 @@ use App\Services\amoAPI\amoAPIHub;
 use App\Traits\Middleware\Services\AmoCRM\AmoTokenExpirationControlTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-// use Illuminate\Support\Facades\Log;
 
 // use App\Services\amoAPI\Entities\Lead as AmoLead;
+
+use Illuminate\Support\Facades\Log;
 
 class LeadCron extends Model
 {
@@ -49,41 +50,43 @@ class LeadCron extends Model
     }
     public static function parseRecentWebhooks()
     {
-        // Log::info(__METHOD__, ['Scheduler::[LeadCron][parseRecentWebhooks]']); //DELETE
+        Log::info(__METHOD__, ['Scheduler::[LeadCron][parseRecentWebhooks]']); //DELETE
 
         if (self::amoTokenExpirationControl()) {
             self::$amoAPIHub = new amoAPIHub(amoCRM::getAuthData());
             $leads           = self::getLeads();
 
             foreach ($leads as $lead) {
-                $fieldId = self::getFieldIdByName(
-                    self::getStageNameById(
-                        (int) json_decode($lead->data)->status_id,
-                        (int) json_decode($lead->data)->pipeline_id
-                    )
+                $stageName = self::getStageNameById(
+                    (int) json_decode($lead->data)->status_id,
+                    (int) json_decode($lead->data)->pipeline_id
                 );
 
-                if ($fieldId) {
-                    // Log::info(__METHOD__, ['geben datum im feld-stufe ein']); //DELETE
+                Log::info(__METHOD__, [$stageName . " : " . config('services.amoCRM.stage_name_signed_for_trial')]); //DELETE
 
-                    self::$amoAPIHub->updateLead([
-                        [
-                            "id"                   => (int) $lead->lead_id,
-                            'custom_fields_values' => [
-                                [
-                                    'field_id' => $fieldId,
-                                    'values'   => [
-                                        [
-                                            'value' => time(),
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ]);
+                if ($stageName === config('services.amoCRM.stage_name_signed_for_trial')) {
+                    Log::info(__METHOD__, ['das Lead muss aktualisiert werden']); //DELETE
                 }
 
-                $lead->delete();
+                // if ($fieldId) {
+                //     self::$amoAPIHub->updateLead([
+                //         [
+                //             "id"                   => (int) $lead->lead_id,
+                //             'custom_fields_values' => [
+                //                 [
+                //                     'field_id' => $fieldId,
+                //                     'values'   => [
+                //                         [
+                //                             'value' => time(),
+                //                         ],
+                //                     ],
+                //                 ],
+                //             ],
+                //         ],
+                //     ]);
+                // }
+
+                // $lead->delete(); //TODO
             }
         }
     }
@@ -124,7 +127,7 @@ class LeadCron extends Model
             foreach ($customFields as $customField) {
                 $fields[] = [
                     'id'   => $customField['id'],
-                    'type'   => $customField['type'],
+                    'type' => $customField['type'],
                     'name' => str_replace(' ', '', trim(mb_strtolower($customField['name']))),
                 ];
             }
