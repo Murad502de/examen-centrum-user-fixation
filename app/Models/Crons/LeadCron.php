@@ -99,7 +99,7 @@ class LeadCron extends Model
                     ]]);
                 }
 
-                // $lead->delete(); //TODO
+                $lead->delete(); //TODO
             }
         }
     }
