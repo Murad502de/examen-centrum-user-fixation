@@ -14,5 +14,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return 'hallo aus examen-centrum-changing-stage';
+    return 'hallo aus examen-centrum-user-fixation';
 });
