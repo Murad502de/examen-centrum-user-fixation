@@ -101,7 +101,7 @@ class LeadCron extends Model
                         ]]);
                     } else {
                         Log::info(__METHOD__, ['user error']); //DELETE
-                        Log::info(__METHOD__, [$user['body']]); //DELETE
+                        Log::info(__METHOD__, [$user]); //DELETE
                     }
                 }
 
