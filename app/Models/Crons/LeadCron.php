@@ -71,7 +71,7 @@ class LeadCron extends Model
                     $user = self::$amoAPIHub->fetchUser((int) json_decode($lead->data)->modified_user_id);
 
                     Log::info(__METHOD__, ['USER']); //DELETE
-                    Log::info(__METHOD__, [$user['body']]); //DELETE
+                    Log::info(__METHOD__, [$user]); //DELETE
 
                     if ($user['body']) {
                         $userName  = $user['body']['name'];
